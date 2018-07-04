@@ -1,6 +1,6 @@
 # Lumin Events plugin for WordPress
 
-The Lumin Events plugin for WordPress gives you access to the Lumin events web widget to display upcoming events for your venue.
+The Lumin Artist Events plugin for WordPress gives you access to the Lumin artist events web widget to display upcoming events for your artist.
 
 Current version: `1.0.5`
 
