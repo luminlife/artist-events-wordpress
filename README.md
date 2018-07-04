@@ -8,7 +8,7 @@ Current version: `1.0.5`
 
 ### Upcoming Events
 
-Add a list of upcoming events to your site using the `[stagehandArtistEvents]` shortcode macro.
+Add a list of upcoming events to your site using the `[stagehand_artist_events]` shortcode macro.
 
 #### Shortcode Parameters ###
 | Parameter                 | Required | Default   | Description                                                                                                                  |

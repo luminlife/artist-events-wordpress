@@ -30,7 +30,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define("SHORTCODE_NAME", 'stagehandArtistEvents');
+define("SHORTCODE_NAME", 'stagehand_artist_events');
 define("LUMINEVENTS_URL",
   "https://www.stagehand.app/widgets/v2/artist_events.widget.min.js");
 define("LUMINEVENTS_STYLE_URL",
@@ -155,7 +155,7 @@ function lumin_events_shortcode($attributes) {
 
   wp_enqueue_script('luminlife-events_scripts');
 
-  $inlineScript = "  luminEvents('${divId}', ${optionsStr});";
+  $inlineScript = "  stagehandArtistEvents('${divId}', ${optionsStr});";
   if (function_exists('wp_add_inline_script')) {
     wp_add_inline_script('luminlife-events_scripts', $inlineScript);
   } else {
