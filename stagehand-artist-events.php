@@ -10,18 +10,18 @@
  *
  * @link              https://www.stagehand.app
  * @since             1.0.0
- * @package           Luminlife_Events
+ * @package           Stagehand_Artist_Events
  *
  * @wordpress-plugin
- * Plugin Name:       Stagehand Events
- * Plugin URI:        https://github.com/luminlife/wordpress
+ * Plugin Name:       Stagehand Artist Events
+ * Plugin URI:        https://github.com/luminlife/wordpress-artist-events
  * Description:       Shortcodes to include Stagehand web widgets
- * Version:           1.0.5
+ * Version:           1.0.0
  * Author:            Lumin Arts Inc.
  * Author URI:        https://www.stagehand.app
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       luminlife-events
+ * Text Domain:       stagehand-artist-events
  * Domain Path:       /languages
  */
 
@@ -30,9 +30,13 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define("SHORTCODE_NAME", 'stagehand_artist_events');
-define("LUMINEVENTS_URL",
-  "https://www.stagehand.app/widgets/v2/artist_events.widget.min.js");
+define("STAGEHAND_ARTIST_EVENTS_SHORTCODE_NAME", 'stagehand_artist_events');
+/*
+define("STAGEHAND_ARTIST_EVENTS_URL",
+  "https://www.stagehand.app/widgets/v2/artist-events.widget.min.js");
+*/
+define("STAGEHAND_ARTIST_EVENTS_URL",
+  "https://eng-test.stagehand.app/widgets/v2/artist-events.widget.min.js");
 define("LUMINEVENTS_STYLE_URL",
   "https://www.stagehand.app/widgets/v2/css/lumin_widget_styles.min.css");
 
@@ -62,7 +66,7 @@ if (!function_exists('write_log')) {
  *
  * @return null
  */
-function enqueue_inline_script( $handle, $js, $deps = array(), $in_footer = false ) {
+function stagehand_artist_events_enqueue_inline_script( $handle, $js, $deps = array(), $in_footer = false ) {
   // Callback for printing inline script.
   $cb = function() use( $handle, $js ) {
     // Ensure script is only included once.
@@ -85,7 +89,7 @@ function enqueue_inline_script( $handle, $js, $deps = array(), $in_footer = fals
   // Delay printing script until all dependencies have been included.
   $cb_maybe = function() use( $deps, $in_footer, $cb, &$cb_maybe ) {
     foreach( $deps as &$dep ) {
-      write_log("enqueue_inline_script: processing '${dep}'");
+      write_log("stagehand_artist_events_enqueue_inline_script: processing '${dep}'");
       if( !wp_script_is( $dep, 'done' ) ) {
         // Dependencies not included in head, try again in footer.
         if( $in_footer ) {
@@ -93,7 +97,7 @@ function enqueue_inline_script( $handle, $js, $deps = array(), $in_footer = fals
         }
         else {
           // Dependencies were not included in `wp_head` or `wp_footer`.
-          write_log("enqueue_inline_script: '${dep}' not in head/footer");
+          write_log("stagehand_artist_events_enqueue_inline_script: '${dep}' not in head/footer");
         }
         return;
       }
@@ -104,12 +108,12 @@ function enqueue_inline_script( $handle, $js, $deps = array(), $in_footer = fals
   add_action( $hook, $cb_maybe, 0 );
 }
 
-function lumin_events_shortcode($attributes) {
+function stagehand_artist_events_shortcode($attributes) {
   /*
    * We only do shortcodes on a page
    */
   if (!is_page()) {
-    return "<p>'".SHORTCODE_NAME."' shortcode is only usable on a page</p>";
+    return "<p>'".STAGEHAND_ARTIST_EVENTS_SHORTCODE_NAME."' shortcode is only usable on a page</p>";
   }
 
   /*
@@ -124,7 +128,7 @@ function lumin_events_shortcode($attributes) {
     'target' => NULL,
   ), $attributes));
 
-  $divId = 'luminlife-events';
+  $divId = 'stagehand-artist-events';
   /*
    * User can give a unique identifier if there are using multiple per page
    */
@@ -136,7 +140,7 @@ function lumin_events_shortcode($attributes) {
    * Set up the options for the event widget
    */
   $optionsStr = "{";
-  if (isset($venue_id)) {
+  if (isset($artist_id)) {
     $optionsStr .= "artistId: ${artist_id},";
   }
   if (isset($limit)) {
@@ -153,15 +157,15 @@ function lumin_events_shortcode($attributes) {
   }
   $optionsStr .= "}";
 
-  wp_enqueue_script('luminlife-events_scripts');
+  wp_enqueue_script('stagehand-artist-events_scripts');
 
   $inlineScript = "  stagehandArtistEvents('${divId}', ${optionsStr});";
   if (function_exists('wp_add_inline_script')) {
-    wp_add_inline_script('luminlife-events_scripts', $inlineScript);
+    wp_add_inline_script('stagehand-artist-events_scripts', $inlineScript);
   } else {
-    enqueue_inline_script('luminlife-events_scripts_inline',
+    stagehand_artist_events_enqueue_inline_script('stagehand-artist-events_scripts_inline',
       $inlineScript,
-      array('luminlife-events_scripts'),
+      array('stagehand-artist-events_scripts'),
       true);
   }
 
@@ -169,18 +173,16 @@ function lumin_events_shortcode($attributes) {
   return $return_string;
 }
 
-function register_shortcodes() {
-  add_shortcode(SHORTCODE_NAME, 'lumin_events_shortcode');
+function stagehand_artist_events_register_shortcodes() {
+  add_shortcode(STAGEHAND_ARTIST_EVENTS_SHORTCODE_NAME, 'stagehand_artist_events_shortcode');
 }
 
-add_action('init', 'register_shortcodes');
-
-function register_scripts() {
+function stagehand_artist_events_register_scripts() {
   /*
    * Prepare the javascript to be enqueued later
    */
-  wp_register_script('luminlife-events_scripts',
-    esc_url_raw(LUMINEVENTS_URL),
+  wp_register_script('stagehand-artist-events_scripts',
+    esc_url_raw(STAGEHAND_ARTIST_EVENTS_URL),
     '',
     null);
 
@@ -191,7 +193,7 @@ function register_scripts() {
      * Look for the shortcode on the page. If we have one,
      * we enqueue our widget stylesheet.
      */
-    if (has_shortcode($post->post_content, SHORTCODE_NAME)) {
+    if (has_shortcode($post->post_content, STAGEHAND_ARTIST_EVENTS_SHORTCODE_NAME)) {
       wp_enqueue_style('luminlife-events_style',
         esc_url_raw(LUMINEVENTS_STYLE_URL),
         '',
@@ -200,4 +202,5 @@ function register_scripts() {
   }
 }
 
-add_action('wp_enqueue_scripts', 'register_scripts');
+add_action('init', 'stagehand_artist_events_register_shortcodes');
+add_action('wp_enqueue_scripts', 'stagehand_artist_events_register_scripts');

@@ -1,8 +1,8 @@
-# Lumin Events plugin for WordPress
+# Stagehand Artist Events plugin for WordPress
 
-The Lumin Artist Events plugin for WordPress gives you access to the Lumin artist events web widget to display upcoming events for your artist.
+The Stagehand Artist Events plugin for WordPress gives you access to the Stagehand artist events web widget to display upcoming events for your artist.
 
-Current version: `1.0.5`
+Current version: `1.0.0`
 
 ## Features
 
