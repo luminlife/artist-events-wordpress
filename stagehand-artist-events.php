@@ -31,12 +31,8 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 define("STAGEHAND_ARTIST_EVENTS_SHORTCODE_NAME", 'stagehand_artist_events');
-/*
 define("STAGEHAND_ARTIST_EVENTS_URL",
   "https://www.stagehand.app/widgets/v2/artist-events.widget.min.js");
-*/
-define("STAGEHAND_ARTIST_EVENTS_URL",
-  "https://eng-test.stagehand.app/widgets/v2/artist-events.widget.min.js");
 define("LUMINEVENTS_STYLE_URL",
   "https://www.stagehand.app/widgets/v2/css/lumin_widget_styles.min.css");
 
